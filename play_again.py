@@ -2,7 +2,7 @@ def play_again():
     while True:
         again = input("Play again (y/n): ")
         if again == "y":
-            pass  # play()
+            play()
         elif again == "n":
             print("Thank you for playing, Bye!")
             break
