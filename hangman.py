@@ -1,11 +1,6 @@
 import random
 import requests
 
-response = requests.get(
-    "https://gist.githubusercontent.com/borlaym/585e2e09dd6abd9b0d0a/raw/6e46db8f5c27cb18fd1dfa50c7c921a0fbacbad0/animals.json"
-)
-words = response.json()
-
 word_list = [
     "Bear",  # 4 letters
     "Wolf",
@@ -37,6 +32,16 @@ word_list = [
     "Scorpion",
     "Squirrel",
 ]
+
+try:
+    response = requests.get(
+        "https://gist.githubusercontent.com/borlaym/585e2e09dd6abd9b0d0a/raw/6e46db8f5c27cb18fd1dfa50c7c921a0fbacbad0/animals.json"
+    )
+    response.raise_for_status()
+    words = response.json()
+except requests.exceptions.RequestException:
+    words = word_list
+
 
 # Visual stages
 stages = [
@@ -183,7 +188,7 @@ def play():
             print("Please enter a letter only!")
 
         print(stages[lives])
-        print(f"Guessed: {guessed_letters}")
+        print(f"Guessed: {guessed_letters[1:]}")
         print("----------------------------------------------------------------")
         print()
         print()
