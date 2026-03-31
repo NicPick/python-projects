@@ -32,71 +32,153 @@ words = [
     "Squirrel",
 ]
 
+# Visual stages
+stages = [
+    """
+    -----
+    |    |
+    |    O
+    |   /|\\
+    |   / \ 
+    |
+    """,
+    """
+    -----
+    |    |
+    |    O
+    |   /|\\
+    |   
+    |
+    """,
+    """
+    -----
+    |    |
+    |    O
+    |    |
+    |   
+    |
+    """,
+    """
+    -----
+    |    |
+    |    
+    |    O
+    |   /|\\
+    |   / \\
+    """,
+    """
+    -----
+    |
+    |    
+    |    O/
+    |   /|
+    |   / \\
+    """,
+    """
+    |    
+    |    
+    |    O/
+    |   /|
+    |   / \\
+    """,
+    """
+     O/
+    /|
+    / \\
+    """,
+]
 
-print("Welcome to Hangman game!")
-print("Category: Animal")
-print()
+you_win = [
+    """
+   \\|//
+
+    \O/
+     |
+    / \\
+    """,
+]
 
 
+##--------------------------------------------------------------------
+
+
+## All game logic
 def play():
+    ## Game starts
+    print("-------------------------------------------------------")
+    print("Welcome to Hangman game!")
+    print("Category: Animal")
+    print()
+
     lives = 6
-    guessed_letters = []
-    secret_word = random.choice(words).lower()
-    for letter in secret_word:
-        print("_", end=" ")
+    guessed_letters = []  # List for collecting already guessed letters
+    secret_word = random.choice(words).lower()  # Random word from the list
+
+    print()
+    # for letter in secret_word:
+    # print("_", end=" ")
+
     while True:
 
+        # Ask for input
+        for letter in secret_word:
+            if letter in guessed_letters:
+                print(letter, end=" ")
+            else:
+                print("_", end=" ")
         print()
         guess = input("Guess a letter in the secret word: ")
         guess = guess.lower()
         print()
-        if not guess.isalpha():
-            print("Please enter a letter only!")
-            continue
 
-        else:
+        # Guess needs to be alphabet only
+        if guess.isalpha():
+            # Check if player has already guess that alphabet,
+            # If not then add it to the already guessed list
+            # If not then the game goes further
             if guess not in guessed_letters:
                 guessed_letters.append(guess)
-                for letter in secret_word:
-                    if letter in guessed_letters:
-                        print(letter, end=" ")
-                    else:
-                        print("_", end=" ")
+                # Loop through the "secret word" one alphabat after one
+                # If that alphabet also in the guessed list
+                # Then print the alphabet
+                # Otherwise print _
                 if guess not in secret_word:
                     lives = lives - 1
-                    if lives == 0:
+                    if lives > 0:
                         print()
-                        print("NO lives left")
-                        print(f"The secret word is: {secret_word}")
-                        print("------------------------------------------------------")
+                        print(
+                            f"Letter {guess} doesn't exist in the secret word. You have {lives} lives left"
+                        )
+                    elif lives == 0:
+                        print(stages[lives])
+                        print()
+                        print("Game over! NO lives left...")
+                        print(f"The secret word is: {secret_word.upper()}")
+                        print()
                         break
-                    print()
-                    print(
-                        f"Letter {guess} doesn't exist in the secret word. You have {lives} lives left"
-                    )
+
                 elif all(letter in guessed_letters for letter in secret_word):
                     print()
-                    print(f"Good Job! You have the secret word: {secret_word} !!!")
-                    print("------------------------------------------------------")
-                    break
-                else:
-                    print()
-                    print(f"Nice guessed! You have {lives} lives left")
-                    print(f"Guessed: {guessed_letters}")
+                    print(you_win[0])
                     print(
-                        "----------------------------------------------------------------"
+                        f"Good Job! You have the secret word: {secret_word.upper()} !!!"
                     )
-                    continue
+                    print()
+                    break
+                elif guess in secret_word:
+                    print()
+                    print(f"Nice guessed! You still have {lives} lives left")
             else:
                 print("You've already guessed this letter. Try another one.")
-                print(f"Guessed: {guessed_letters}")
-                print(
-                    "----------------------------------------------------------------"
-                )
-                continue
 
-            print(f"Guessed: {guessed_letters}")
-            print("----------------------------------------------------------------")
+        else:
+            print("Please enter a letter only!")
+
+        print(stages[lives])
+        print(f"Guessed: {guessed_letters}")
+        print("----------------------------------------------------------------")
+        print()
+        print()
 
 
 def play_again():
