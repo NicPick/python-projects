@@ -1,6 +1,12 @@
 import random
+import requests
 
-words = [
+response = requests.get(
+    "https://gist.githubusercontent.com/borlaym/585e2e09dd6abd9b0d0a/raw/6e46db8f5c27cb18fd1dfa50c7c921a0fbacbad0/animals.json"
+)
+words = response.json()
+
+word_list = [
     "Bear",  # 4 letters
     "Wolf",
     "Deer",
@@ -90,7 +96,7 @@ stages = [
 
 you_win = [
     """
-   \\|//
+  \\\|//
 
     \O/
      |
@@ -111,7 +117,7 @@ def play():
     print()
 
     lives = 6
-    guessed_letters = []  # List for collecting already guessed letters
+    guessed_letters = [" "]  # List for collecting already guessed letters
     secret_word = random.choice(words).lower()  # Random word from the list
 
     print()
@@ -124,6 +130,8 @@ def play():
         for letter in secret_word:
             if letter in guessed_letters:
                 print(letter, end=" ")
+            elif letter == " ":
+                print(" ", end=" ")
             else:
                 print("_", end=" ")
         print()
